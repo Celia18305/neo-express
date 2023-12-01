@@ -51,20 +51,23 @@ can be specified in multiple ways:
 ## neoxp create
 
 ```
-Usage: neoxp create [Options] [Output]
+Usage: neoxp create [Options] <Output>
 
 Arguments:
-[Options]:
-  -o|--output <OUTPUT>                    Name of .neo-express file to create
+  <Output>                                Name of .neo-express file to create
                                           Default location is home directory as:
                                           Linux: $HOME/.neo-express/default.neo-express
                                           Windows: %UserProfile%\.neo-express\default.neo-express
+Options:
   -c|--count <COUNT>                      Number of consensus nodes to create
                                           Default: 1
                                           Allowed values are: 1, 4, 7.
   -a|--address-version <ADDRESS_VERSION>  Version to use for addresses in this blockchain instance
                                           Default: 53
   -f|--force                              Overwrite existing data
+  -p|--private-key <PRIVATE_KEY>          Private key for default dev account
+                                          (Format: HEX or WIF)
+                                          Default: Random
 ```
 
 The `create` command is used to create a new Neo-Express blockchain network for local development
@@ -87,10 +90,11 @@ via the `--input` option.
 ## neoxp run
 
 ```
-Usage: neoxp run [Options]
+Usage: neoxp run [options] <NodeIndex>
 
-[Options]:
-  -n|--node-index <NODE_INDEX>                Index of node to run (Default: 0)
+Arguments:
+  NodeIndex                                   Index of node to run (Default: 0)
+Options:
   -i|--input <INPUT>                          Path to neo-express data file
   -s|--seconds-per-block <SECONDS_PER_BLOCK>  Time between blocks
   -d|--discard                                Discard blockchain changes on shutdown
@@ -100,7 +104,7 @@ Usage: neoxp run [Options]
 Once created, a Neo-Express blockchain network is started with the `run` command. The consensus
 node index to be run must be passed as an argument to the run command. If not specified, the node
 index defaults to 0, indicating the first consensus node. So for a single node blockchain network,
-the user can simply call `neo-express run`. Note, each node of a multi-node blockchain network must
+the user can simply call `neoxp run`. Note, each node of a multi-node blockchain network must
 be run separately.
 
 When the blockchain is run, the user can specify how often a new block is minted. By default, a new
@@ -112,51 +116,46 @@ file.
 > Note, the user may specify a different seconds per block value each time a blockchain is run, but
 > all nodes in multi-node blockchain must use the same value when running.
 
-By default, the blockchain network persists information to disk when a new block is minted. For development
-purposes, it is sometimes useful to run the blockchain network without saving new block persisting
-new blocks. By using the `--discard` option, new blocks are saved in memory only and are discarded when
-the blockchain network is shut down.
+By default, the blockchain network persists information to disk when a new block is minted. For development purposes, it is sometimes useful to run the blockchain network without saving new block persisting new blocks. By using the `--discard` option, new blocks are saved in memory only and are discarded when the blockchain network is shut down.
 
 ## neoxp stop
 
 ```
-Usage: neoxp stop [Options]
+Usage: neoxp stop [Options] <NodeIndex>
 
-[Options]:
-  -n|--node-index <NODE_INDEX>    Index of node to stop (Default: 0)
-  -i|--input <INPUT>              Path to neo-express data file
-  -a|--all            Stop all nodes
+Arguments:
+  NodeIndex                                   Index of node to stop (Default: 0)
+Options:
+  -i|--input <INPUT>                          Path to neo-express data file
+  -a|--all                                    Stop all nodes
 ```
 
 When running in a terminal window, neo-express can be shutdown via standard CTRL-C or CTRL-BREAK operations.
-Additionally, you can stop a running neo-express network via the `stop` command. Like the `run` command, the
-`stop` command takes a node index to stop, defaulting to 0. The `--all` option shuts down all running consensus
+Additionally, you can stop a running neo-express network via the `stop` command. Like the `run` command, the `stop` command takes a node index to stop, defaulting to 0. The `--all` option shuts down all running consensus
 nodes in the network.
 
 ## neoxp reset
 
 ```
-Usage: neoxp reset [Options]
+Usage: neoxp reset [Options] <NodeIndex>
 
-[Options]:
-  -n|--node-index <NODE_INDEX>  Index of node to reset (Default: 0)
+Arguments:
+  NodeIndex                     Index of node to reset (Default: 0)
+Options:
   -i|--input <INPUT>            Path to neo-express data file
   -f|--force                    Overwrite existing data
   -a|--all                      Reset all nodes
 ```
 
-A Neo-express blockchain network can be reset back to its genesis block via the `reset` command. This
-is useful for keeping the Neo-express blockchain network in a known state for test and debug purposes.
-Like the `stop` command, the node index defaults to 0 or the `--all` option can be used to reset all
-nodes. The `--force` option must be specified in order to discard existing blockchain network state.
+A Neo-express blockchain network can be reset back to its genesis block via the `reset` command. This is useful for keeping the Neo-express blockchain network in a known state for test and debug purposes.
+Like the `stop` command, the node index defaults to 0 or the `--all` option can be used to reset all nodes. The `--force` option must be specified in order to discard existing blockchain network state.
 
 ### neoxp export
 
 ```
 Usage: neoxp export [Options]
 
-Arguments:
-[Options]:
+Options:
   -i|--input <INPUT>  Path to neo-express data file
 ```
 
@@ -183,10 +182,12 @@ for use in the Neo-Express blockchain network.
 Usage: neoxp wallet create [Options] <Name>
 
 Arguments:
+  Name                            Wallet name
 [Options]:
-  -f|--force          Overwrite existing data
-  -i|--input <INPUT>  Path to neo-express data file
-<Name>: Wallet name
+  -f|--force                      Overwrite existing data
+  -i|--input <INPUT>              Path to neo-express data file
+  -p|--private-key <PRIVATE_KEY>  Private key for account (Format: HEX or WIF)
+                                  Default: Random
 ```
 
 The `wallet create` command creates a new standard wallet with a single account. This command takes
